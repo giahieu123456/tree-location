@@ -12,3 +12,39 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum unit {
+  CM2
+  M2
+  KM2
+}
+
+model Building {
+  id        String     @id(map: "pk_building") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamp()
+  name      String     @unique() @map("name") @db.VarChar(50)
+  isDelete  Boolean    @default(false) @map("is_delete") @db.Boolean()
+  Location  Location[]
+
+  @@map("building")
+}
+
+model Location {
+  id             String     @id(map: "pk_location") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
+  createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt      DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamp()
+  name           String     @unique() @map("name") @db.VarChar(50)
+  locationNumber String     @unique() @map("location_number") @db.VarChar(255)
+  areaValue      Decimal    @map("area_value") @db.Decimal()
+  unit           unit       @default(M2) @map("unit")
+  isDelete       Boolean    @default(false) @map("is_delete") @db.Boolean()
+  buildingId     String     @db.Uuid()
+  //relation
+  building       Building   @relation(fields: [buildingId], references: [id], map: "fk_location_to_building")
+  parentId       String?    @map("parent_id") @db.Uuid()
+  parent         Location?  @relation("location_to_location", fields: [parentId], references: [id], onDelete: Restrict)
+  childrens      Location[] @relation("location_to_location")
+
+  @@map("location")
+}
