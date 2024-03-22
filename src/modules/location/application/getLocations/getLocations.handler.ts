@@ -9,14 +9,14 @@ import {
 } from './getLocations.response';
 
 @QueryHandler(GetBuildingsQuery)
-export class GetAllLegalDocHandler {
+export class GetLocationHandler {
   constructor(private readonly dbContext: PrismaService) {}
 
   public async execute(
     query: GetBuildingsQuery,
   ): Promise<GetBuildingsQueryResponse> {
     const { take, skip } = query.option;
-    const { total, data } = await this.getAllBuildings(query.option);
+    const { total, data } = await this.getLocations(query.option);
 
     return {
       skip: +skip,
@@ -26,7 +26,7 @@ export class GetAllLegalDocHandler {
     };
   }
 
-  private async getAllBuildings(
+  private async getLocations(
     option: GetLocationsRequestQuery,
   ): Promise<{ data: GetLocationsResponse[]; total: number }> {
     const { search, order, valueOrder, take, skip } = option;

@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger';
 import { GetBuildingsQuery } from './getLocations.query';
 import { GetLocationsRequestQuery } from './getLocations.request-query';
-import { GetBuildingsQueryResponse } from './getLocations.response';
+import { GetLocationsResponse } from './getLocations.response';
 
 @ApiTags('Location')
 @ApiBearerAuth()
@@ -16,19 +16,17 @@ import { GetBuildingsQueryResponse } from './getLocations.response';
   path: 'location',
   version: '1',
 })
-export class GetLegalDocEndpoint {
+export class GetLocationEndpoint {
   constructor(protected queryBus: QueryBus) {}
 
   @ApiOperation({ description: 'get locations' })
   @Get()
   @ApiOkResponse({
-    type: GetBuildingsQueryResponse,
+    type: GetLocationsResponse,
     description: 'Successfully retrieved location.',
   })
-  get(
-    @Query() query: GetLocationsRequestQuery,
-  ): Promise<GetBuildingsQueryResponse> {
-    return this.queryBus.execute<GetBuildingsQuery, GetBuildingsQueryResponse>(
+  get(@Query() query: GetLocationsRequestQuery): Promise<GetLocationsResponse> {
+    return this.queryBus.execute<GetBuildingsQuery, GetLocationsResponse>(
       new GetBuildingsQuery(query),
     );
   }
