@@ -13,10 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum unit {
+enum unitEnum {
   CM2
   M2
   KM2
+	@@map("unit")
 }
 
 model Building {
@@ -34,12 +35,13 @@ model Location {
   id             String     @id(map: "pk_location") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
   createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamp()
   updatedAt      DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamp()
-  name           String     @unique() @map("name") @db.VarChar(50)
+  name           String      @map("name") @db.VarChar(50)
   locationNumber String     @unique() @map("location_number") @db.VarChar(255)
   areaValue      Decimal    @map("area_value") @db.Decimal()
-  unit           unit       @default(M2) @map("unit")
+  unit           unitEnum       @default(M2) @map("unit")
   isDelete       Boolean    @default(false) @map("is_delete") @db.Boolean()
   buildingId     String     @db.Uuid()
+  level  Int @map("level") @db.Integer()
   //relation
   building       Building   @relation(fields: [buildingId], references: [id], map: "fk_location_to_building")
   parentId       String?    @map("parent_id") @db.Uuid()

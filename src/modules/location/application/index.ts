@@ -1,2 +1,4 @@
-/* eslint-disable prettier/prettier */
 export * from './createLocation';
+export * from './getLocations';
+export * from './softDeleteLocation';
+export * from './updateLocation';
