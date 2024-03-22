@@ -45,6 +45,17 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
+## Running the app
+
+```bash
+src/
+modules/ - Contains all the modules of the project.
+config/ - Configuration files and environment variable management.
+main.ts - Entry point of the application.
+test/ - Contains e2e tests.
+```
+
+
 ## Test
 
 ```bash
