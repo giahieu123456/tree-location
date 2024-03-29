@@ -45,6 +45,34 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
+## Project Structure
+
+```bash
+src/
+  common/ - Contains all decorator, pipe.
+  database/ - export database module and config prisma service.
+  modules/ - Contains all the modules of the project.
+  main.ts - Entry point of the application.
+test/ - Contains e2e tests.
+```
+
+## API Endpoints
+
+```bash
+Location
+  GET v1/location - Retrieve location item.
+  GET v1/location/{id} - Retrieve location item by id.
+  PUT v1/location/{id} - update location item by id.
+  POST v1/location - create location item.
+  PUT v1/location/soft-delete/{id} - soft delete location item by id.
+Building
+  GET v1/building - Retrieve building item.
+  POST v1/building - create building item.
+  PUT v1/building/{id} - update building item by id.
+  PUT v1/building/soft-delete/{id} - soft delete building item by id.
+```
+
+
 ## Test
 
 ```bash
