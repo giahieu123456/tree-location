@@ -7,9 +7,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { GetLocationsRequestQuery } from '../getLocations/getLocations.request-query';
-import { GetLocationsResponse } from '../getLocations/getLocations.response';
 import { GetBuildingsQuery } from './getLocationById.query';
 import { GetLocationByIdRequestParam } from './getLocationById.request-param';
+import { GetLocationsResponse } from './getlocation.response';
 
 @ApiTags('Location')
 @ApiBearerAuth()

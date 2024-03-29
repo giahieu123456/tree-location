@@ -1,7 +1,7 @@
 import { QueryHandler } from '@nestjs/cqrs';
 import { PrismaService } from 'src/database';
-import { GetLocationsResponse } from '../getLocations/getLocations.response';
 import { GetBuildingsQuery } from './getLocationById.query';
+import { GetLocationsResponse, LocationResponse } from './getlocation.response';
 
 @QueryHandler(GetBuildingsQuery)
 export class GetLocationByIdHandler {
@@ -14,7 +14,7 @@ export class GetLocationByIdHandler {
   }
 
   private async getLocation(id: string): Promise<GetLocationsResponse> {
-    return await this.dbContext.location.findFirstOrThrow({
+    const parentLocation = await this.dbContext.location.findFirstOrThrow({
       where: {
         id,
       },
@@ -23,5 +23,43 @@ export class GetLocationByIdHandler {
         childrens: true,
       },
     });
+
+    const result = parentLocation.childrens;
+    const childrends = await this.getChildrens(result.map((item) => item.id));
+    return {
+      parent: parentLocation,
+      allChildrens: childrends,
+    };
+  }
+
+  private async getChildrens(
+    locationIds: string[],
+  ): Promise<LocationResponse[]> {
+    let result: LocationResponse[] = [];
+    if (locationIds.length > 0) {
+      const locations = await this.dbContext.location.findMany({
+        where: {
+          id: {
+            in: locationIds,
+          },
+        },
+        include: {
+          childrens: true,
+        },
+      });
+      result = [...result, ...locations];
+      let childrenIds: string[] = [];
+      locations.forEach((item) => {
+        childrenIds = [
+          ...childrenIds,
+          ...item.childrens.map((child) => child.id),
+        ];
+      });
+      if (childrenIds) {
+        const grandchildrens = await this.getChildrens(childrenIds);
+        result = [...result, ...grandchildrens];
+      }
+    }
+    return result;
   }
 }

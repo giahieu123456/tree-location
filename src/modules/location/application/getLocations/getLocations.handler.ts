@@ -66,8 +66,8 @@ export class GetLocationHandler {
         where: {
           AND: andWhereConditions,
         },
-        take: +take,
-        skip: +skip,
+        take: take,
+        skip: skip,
         include: {
           building: true,
           childrens: true,

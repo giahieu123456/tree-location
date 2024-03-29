@@ -1,9 +1,10 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import {
   IsArray,
   IsEnum,
-  IsNumberString,
+  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -18,16 +19,18 @@ export class GetLocationsRequestQuery {
     example: 10,
   })
   @IsOptional()
-  @IsNumberString()
-  take?: string;
+  @Transform(({ value }) => +value)
+  @IsNumber()
+  take?: number;
 
   @ApiPropertyOptional({
     description: 'skip',
     example: 0,
   })
   @IsOptional()
-  @IsNumberString()
-  skip?: string;
+  @IsOptional()
+  @Transform(({ value }) => +value)
+  skip?: number;
 
   @ApiPropertyOptional({
     description: 'Search by keyword',
